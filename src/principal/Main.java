@@ -15,7 +15,7 @@ public class Main {
 
             while(contExtracao<=10) {
             	PesquisaTwitter twitter = new PesquisaTwitter();
-            	System.out.println("Extração " +(contExtracao++));
+            	System.out.println("Extração " +(contExtracao));
                         	
             	twitter.pesquisa();
             	Thread.sleep(tempo);
@@ -23,6 +23,7 @@ public class Main {
             	System.out.println("Extração " +(contExtracao) +" concluída!");
             	
             	System.out.println();
+            	contExtracao++;
             }
             
         } catch (Exception e) {
