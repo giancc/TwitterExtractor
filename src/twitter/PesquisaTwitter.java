@@ -64,64 +64,78 @@ public class PesquisaTwitter {
 
 	public void pesquisa() {
 
-		try {
-			this.query = new Query("eleicoes2020");
-			this.query.setCount(100);
-			this.result = this.twitter.search(query);
+		try {			
+			Query query = new Query("eleicoes2020");
+			query.setCount(100);
 
+			int searchResultCount;
+			long lowestTweetId = Long.MAX_VALUE;
 			Arquivo arquivo = new Arquivo();
-			for (Status status : result.getTweets()) {
+			do {
+				QueryResult queryResult = twitter.search(query);
 
-				String data = status.getCreatedAt().toString();
-				String mes = data.split(" ")[1].trim();
-				String codMes;
+				searchResultCount = queryResult.getTweets().size();
 
-				if(mes.equals("Jan")) {
-					codMes = "01";
-				} else if(mes.equals("Feb")) {
-					codMes = "02";
-				} else if(mes.equals("Mar")) {
-					codMes = "03";
-				} else if(mes.equals("Apr")) {
-					codMes = "04";
-				} else if(mes.equals("May")) {
-					codMes = "05";
-				} else if(mes.equals("Jun")) {
-					codMes = "06";
-				} else if(mes.equals("Jul")) {
-					codMes = "07";
-				} else if(mes.equals("Aug")) {
-					codMes = "08";
-				} else if(mes.equals("Sep")) {
-					codMes = "09";
-				} else if(mes.equals("Oct")) {
-					codMes = "10";
-				} else if(mes.equals("Nov")) {
-					codMes = "11";
-				} else {
-					codMes = "12";
-				}
+				for (Status tweet : queryResult.getTweets()) {
 
-				String dataFormatada = data.split(" ")[2]+"/"+codMes+"/"+data.split(" ")[5];
+					String data = tweet.getCreatedAt().toString();
+					String mes = data.split(" ")[1].trim();
+					String codMes;
 
-				String conteudoTweet = status.getText();
-				conteudoTweet = conteudoTweet.replaceAll("\n", "").replaceAll("\r", "");
-				HashtagEntity[] hashTag = status.getHashtagEntities();
-				StringBuilder hashTags = new StringBuilder("(");
+					if(mes.equals("Jan")) {
+						codMes = "01";
+					} else if(mes.equals("Feb")) {
+						codMes = "02";
+					} else if(mes.equals("Mar")) {
+						codMes = "03";
+					} else if(mes.equals("Apr")) {
+						codMes = "04";
+					} else if(mes.equals("May")) {
+						codMes = "05";
+					} else if(mes.equals("Jun")) {
+						codMes = "06";
+					} else if(mes.equals("Jul")) {
+						codMes = "07";
+					} else if(mes.equals("Aug")) {
+						codMes = "08";
+					} else if(mes.equals("Sep")) {
+						codMes = "09";
+					} else if(mes.equals("Oct")) {
+						codMes = "10";
+					} else if(mes.equals("Nov")) {
+						codMes = "11";
+					} else {
+						codMes = "12";
+					}
 
-				if(hashTag.length > 0 ) {
-					for (int i = 0; i < hashTag.length; i++) {
-						hashTags.append(hashTag[i].getText());
+					String dataFormatada = data.split(" ")[2]+"/"+codMes+"/"+data.split(" ")[5];
 
-						if ( (i+1)  != hashTag.length) {
-							hashTags.append(",");
+					String conteudoTweet = tweet.getText();
+					conteudoTweet = conteudoTweet.replaceAll("\n", "").replaceAll("\r", "");
+					HashtagEntity[] hashTag = tweet.getHashtagEntities();
+					StringBuilder hashTags = new StringBuilder("(");
+
+					if(hashTag.length > 0 ) {
+						for (int i = 0; i < hashTag.length; i++) {
+							hashTags.append(hashTag[i].getText());
+
+							if ( (i+1)  != hashTag.length) {
+								hashTags.append(",");
+							}
 						}
 					}
-				}
-				hashTags.append(")");
+					hashTags.append(")");
 
-				arquivo.write(status.getId()+";"+conteudoTweet+";"+ dataFormatada+";"+hashTags);
-			}
+					arquivo.write(tweet.getId()+";"+conteudoTweet+";"+ dataFormatada+";"+hashTags);
+
+					if (tweet.getId() < lowestTweetId) {
+						lowestTweetId = tweet.getId();
+						query.setMaxId(lowestTweetId);
+					}
+				}
+
+			} while (searchResultCount != 0 && searchResultCount % 100 == 0);
+
 		} catch(TwitterException e) {
 			e.printStackTrace();
 		} catch(IOException e) {
@@ -131,10 +145,10 @@ public class PesquisaTwitter {
 
 	public void limites() {
 		Map<String, RateLimitStatus> rateLimitStatus;
-		
+
 		try {
 			rateLimitStatus = twitter.getRateLimitStatus();
-			
+
 			for (String endpoint : rateLimitStatus.keySet()) {
 				RateLimitStatus status = rateLimitStatus.get(endpoint);
 				System.out.println("Endpoint: " + endpoint);
@@ -142,11 +156,11 @@ public class PesquisaTwitter {
 				System.out.println("Remaining: " + status.getRemaining());
 				System.out.println("ResetTimeInSeconds: " + status.getResetTimeInSeconds());
 				System.out.println("SecondsUntilReset: " + status.getSecondsUntilReset());
-				
+
 				System.out.println();
 				System.out.println();
 			}
-			
+
 		} catch (TwitterException e) {
 			e.printStackTrace();
 		}

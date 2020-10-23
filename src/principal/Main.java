@@ -12,13 +12,13 @@ public class Main {
     	int contExtracao = 1;
     	
         try {
-
+        	PesquisaTwitter twitter = new PesquisaTwitter();
             while(contExtracao<=10) {
-            	PesquisaTwitter twitter = new PesquisaTwitter();
+            	
             	System.out.println("Extração " +(contExtracao));
                         	
             	twitter.pesquisa();
-            	Thread.sleep(tempo);
+//            	Thread.sleep(tempo);
             	
             	System.out.println("Extração " +(contExtracao) +" concluída!");
             	
@@ -29,6 +29,8 @@ public class Main {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        
+        System.out.println("Programa finalizado!");
 
     }
 }
