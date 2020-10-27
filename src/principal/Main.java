@@ -13,7 +13,7 @@ public class Main {
     	
         try {
         	PesquisaTwitter twitter = new PesquisaTwitter();
-            while(contExtracao<=10) {
+            while(contExtracao<=5) {
             	
             	System.out.println("Extração " +(contExtracao));
                         	
