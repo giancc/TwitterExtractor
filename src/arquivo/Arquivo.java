@@ -37,7 +37,6 @@ public class Arquivo {
         } catch(Exception e) {
             e.printStackTrace();
         } finally {
-        	this.fileWriter.close();
             this.bufferedWriter.close();
         }
     }
