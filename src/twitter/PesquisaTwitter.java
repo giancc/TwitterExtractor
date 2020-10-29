@@ -23,6 +23,7 @@ public class PesquisaTwitter {
 	private ConfigurationBuilder cb;
 	private TwitterFactory tf;
 	private Twitter twitter;
+	private long contadorTweet = 0;
 
 //	String partidos[] = {"MDB\r\n" +  
 //			"PTB\r\n" +  
@@ -72,8 +73,6 @@ public class PesquisaTwitter {
 
 	public void pesquisa() {
 		
-		long contadorTweet = 0;
-
 		try {			
 			Query query = new Query("eleicoes2020");
 			query.setCount(100);
@@ -115,7 +114,7 @@ public class PesquisaTwitter {
 					
 					contadorTweet++;
 
-					arquivo.write(contadorTweet+";"+conteudoTweet+";"+ data+";"+hashTags);
+					arquivo.write(contadorTweet +";" +conteudoTweet +";" + data +";" +hashTags);
 
 					if (tweet.getId() < lowestTweetId) {
 						lowestTweetId = tweet.getId();
@@ -124,7 +123,8 @@ public class PesquisaTwitter {
 				}
 
 			} while (searchResultCount != 0 && searchResultCount % 100 == 0);
-
+			
+			
 		} catch(TwitterException e) {
 			e.printStackTrace();
 		} catch(IOException e) {
