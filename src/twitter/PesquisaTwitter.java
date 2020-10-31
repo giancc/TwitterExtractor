@@ -73,13 +73,14 @@ public class PesquisaTwitter {
 
 	public void pesquisa() {
 		
+		
 		try {			
 			Query query = new Query("eleicoes2020");
 			query.setCount(100);
 
 			int searchResultCount;
 			long lowestTweetId = Long.MAX_VALUE;
-			Arquivo arquivo = new Arquivo();
+			Arquivo arquivo = new Arquivo("extracao");
 			
 			do {
 				QueryResult queryResult = twitter.search(query);
@@ -113,8 +114,11 @@ public class PesquisaTwitter {
 					hashTags.append(")");
 					
 					contadorTweet++;
+					
+					String linhaArquivo = contadorTweet +";" +conteudoTweet +";" + data +";" +hashTags;
+									
 
-					arquivo.write(contadorTweet +";" +conteudoTweet +";" + data +";" +hashTags);
+					arquivo.write(linhaArquivo);
 
 					if (tweet.getId() < lowestTweetId) {
 						lowestTweetId = tweet.getId();
