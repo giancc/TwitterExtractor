@@ -18,46 +18,46 @@ import twitter4j.conf.ConfigurationBuilder;
 
 public class PesquisaTwitter {
 
-//	private Query query;
-//	private QueryResult result;
+	//	private Query query;
+	//	private QueryResult result;
 	private ConfigurationBuilder cb;
 	private TwitterFactory tf;
 	private Twitter twitter;
 	private long contadorTweet = 0;
 
-//	String partidos[] = {"MDB\r\n" +  
-//			"PTB\r\n" +  
-//			"PDT\r\n" +  
-//			"PT\r\n" +  
-//			"DEM\r\n" +  
-//			"PCdoB\r\n" +  
-//			"PSB\r\n" +  
-//			"PSDB\r\n" +  
-//			"PTC\r\n" +  
-//			"PSC\r\n" +  
-//			"PMN\r\n" +  
-//			"CIDADANIA\r\n" +  
-//			"PV\r\n" +  
-//			"AVANTE\r\n" +  
-//			"PP\r\n" +  
-//			"PSTU\r\n" +  
-//			"PCB\r\n" +  
-//			"PRTB\r\n" +  
-//			"DC\r\n" +  
-//			"PCO\r\n" +  
-//			"PODE\r\n" +  
-//			"PSL\r\n" +  
-//			"REPUBLICANOS \r\n" +  
-//			"PSOL\r\n" +  
-//			"PL\r\n" +  
-//			"PSD\r\n" +  
-//			"PATRIOTA\r\n" +  
-//			"PROS\r\n" +  
-//			"SOLIDARIEDADE\r\n" +  
-//			"NOVO\r\n" +  
-//			"REDE\r\n" +  
-//			"PMB\r\n" +  
-//	"UP\r\n"};
+	//	String partidos[] = {"MDB\r\n" +  
+	//			"PTB\r\n" +  
+	//			"PDT\r\n" +  
+	//			"PT\r\n" +  
+	//			"DEM\r\n" +  
+	//			"PCdoB\r\n" +  
+	//			"PSB\r\n" +  
+	//			"PSDB\r\n" +  
+	//			"PTC\r\n" +  
+	//			"PSC\r\n" +  
+	//			"PMN\r\n" +  
+	//			"CIDADANIA\r\n" +  
+	//			"PV\r\n" +  
+	//			"AVANTE\r\n" +  
+	//			"PP\r\n" +  
+	//			"PSTU\r\n" +  
+	//			"PCB\r\n" +  
+	//			"PRTB\r\n" +  
+	//			"DC\r\n" +  
+	//			"PCO\r\n" +  
+	//			"PODE\r\n" +  
+	//			"PSL\r\n" +  
+	//			"REPUBLICANOS \r\n" +  
+	//			"PSOL\r\n" +  
+	//			"PL\r\n" +  
+	//			"PSD\r\n" +  
+	//			"PATRIOTA\r\n" +  
+	//			"PROS\r\n" +  
+	//			"SOLIDARIEDADE\r\n" +  
+	//			"NOVO\r\n" +  
+	//			"REDE\r\n" +  
+	//			"PMB\r\n" +  
+	//	"UP\r\n"};
 
 	public PesquisaTwitter() {
 
@@ -72,8 +72,7 @@ public class PesquisaTwitter {
 	}
 
 	public void pesquisa() {
-		
-		
+
 		try {			
 			Query query = new Query("eleicoes2020");
 			query.setCount(100);
@@ -81,7 +80,7 @@ public class PesquisaTwitter {
 			int searchResultCount;
 			long lowestTweetId = Long.MAX_VALUE;
 			Arquivo arquivo = new Arquivo("extracao");
-			
+
 			do {
 				QueryResult queryResult = twitter.search(query);
 
@@ -90,7 +89,7 @@ public class PesquisaTwitter {
 				for (Status tweet : queryResult.getTweets()) {
 
 					String data = tweet.getCreatedAt().toString();
-					
+
 					try {
 						data = new SimpleDateFormat("dd/MM/yyyy").format(new SimpleDateFormat("EEE MMM d HH:mm:ss zzz yyyy", Locale.US).parse(data));
 					} catch (java.text.ParseException e) {
@@ -100,7 +99,8 @@ public class PesquisaTwitter {
 					String conteudoTweet = tweet.getText();
 					conteudoTweet = conteudoTweet.replaceAll("\n", "").replaceAll("\r", "");
 					HashtagEntity[] hashTag = tweet.getHashtagEntities();
-					StringBuilder hashTags = new StringBuilder("(");
+					
+					StringBuilder hashTags = new StringBuilder();
 
 					if(hashTag.length > 0 ) {
 						for (int i = 0; i < hashTag.length; i++) {
@@ -111,12 +111,11 @@ public class PesquisaTwitter {
 							}
 						}
 					}
-					hashTags.append(")");
-					
+//					hashTags.append(")");
+
 					contadorTweet++;
-					
+
 					String linhaArquivo = contadorTweet +";" +conteudoTweet +";" + data +";" +hashTags;
-									
 
 					arquivo.write(linhaArquivo);
 
@@ -127,8 +126,8 @@ public class PesquisaTwitter {
 				}
 
 			} while (searchResultCount != 0 && searchResultCount % 100 == 0);
-			
-			
+
+
 		} catch(TwitterException e) {
 			e.printStackTrace();
 		} catch(IOException e) {

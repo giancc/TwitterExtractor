@@ -3,11 +3,9 @@ package arquivo;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Arrays;
 
 public class Arquivo {
 	private File file;
@@ -29,13 +27,13 @@ public class Arquivo {
 		String dir = System.getProperty("user.dir");
 
 		if (dir.contains("\\")) {
-			dir = dir.replace("\\", "\\\\");
+			dir = dir.replace("\\", "\\");
 		}
 
-		String caminhoArquivo = dir.concat("\\\\" +nome +".txt");
-		System.out.println("Arquivo com tweets salvo em: " +caminhoArquivo);
+		dir = dir.concat("\\" +nome +".txt");
 
-		this.file = new File(caminhoArquivo);
+		this.file = new File(dir);
+		System.out.println("Dados extraídos em:" +file.getAbsolutePath());
 	}
 
 	public void trataArquivo() {
@@ -62,7 +60,7 @@ public class Arquivo {
 				}
 
 				linha = this.trataLinhaArquivo(linha);
-				System.out.println(linha);
+				//System.out.println(linha);
 				bw.write(linha);
 				bw.newLine();
 //				Thread.sleep(3000);
@@ -74,7 +72,10 @@ public class Arquivo {
 	}
 
 	public void write(String linha) throws IOException {
-		if (this.file == null) return;
+		if (this.file == null) {
+			System.out.println("ERRO");
+			return;
+		}
 
 		try {
 			this.fileWriter = new FileWriter(this.file, true);
@@ -92,24 +93,49 @@ public class Arquivo {
 
 	public String trataLinhaArquivo(String linhaArquivo) {
 		final int MAX_CARACTERES = 280;
+		final int MAX_HASHTAGS = 200;
 		int faltante = 0;
+		
+		String res = "";
 
 		String[] vetorString = linhaArquivo.split(";");
-
-		if(vetorString[1].length() < MAX_CARACTERES) {
-			faltante = MAX_CARACTERES - vetorString[1].length();
-		}
-
+			
 		String aux = vetorString[1];
+
+		if(aux.length() < MAX_CARACTERES) {
+			faltante = MAX_CARACTERES - aux.length();
+		}
+				
 		for(int i=0; i<faltante; i++) {
 			aux = aux.concat("0");
 		}
-
-		vetorString[1] = aux;
-
-		linhaArquivo = Arrays.toString(vetorString);
-
-		return linhaArquivo;
+		
+		res = res.concat(vetorString[0]);
+		res = res.concat(";");
+		res = res.concat(aux);
+		res = res.concat(";");
+		res = res.concat(vetorString[2]);
+		res = res.concat(";");
+		if(vetorString.length==4) {
+			aux = vetorString[3];
+		}else {
+			aux = "";
+		}
+		//-----------------------------------
+		
+		if(aux.length() < MAX_HASHTAGS) {
+			faltante = MAX_HASHTAGS - aux.length();
+		}
+		
+		for(int i=0; i<faltante; i++) {
+			aux = aux.concat("0");
+		}
+		
+		res = res.concat(aux);
+		
+		//System.out.println(res);
+		
+		return res;
 	}
 
 
