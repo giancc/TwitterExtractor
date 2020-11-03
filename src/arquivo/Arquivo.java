@@ -6,6 +6,8 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Arquivo {
 	private File file;
@@ -93,14 +95,27 @@ public class Arquivo {
 
 	public String trataLinhaArquivo(String linhaArquivo) {
 		final int MAX_CARACTERES = 280;
-		final int MAX_HASHTAGS = 200;
+		final int MAX_HASHTAGS = 250;
 		int faltante = 0;
 		
 		String res = "";
 
 		String[] vetorString = linhaArquivo.split(";");
-			
+		
 		String aux = vetorString[1];
+		
+		if(aux.contains("http")) {
+			String urlPattern = "((https?|ftp|gopher|telnet|file|Unsure|http):((//)|(\\\\))+[\\w\\d:#@%/;$()~_?\\+-=\\\\\\.&]*)";
+	        Pattern p = Pattern.compile(urlPattern,Pattern.CASE_INSENSITIVE);
+	        
+	        Matcher m = p.matcher(aux);
+	        int i = 0;
+	        while (m.find()) {
+	        	aux = aux.replaceAll(m.group(i),"").trim();
+	            i++;
+	        }
+//	        System.out.println(aux);
+		}
 
 		if(aux.length() < MAX_CARACTERES) {
 			faltante = MAX_CARACTERES - aux.length();

@@ -6,6 +6,6 @@
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/giio-/git/TwitterExtractor/twitter4j-4.0.7/lib/twitter4j-core-4.0.7.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Gian Carlos/git/TwitterExtractor/twitter4j-4.0.7/lib/twitter4j-core-4.0.7.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

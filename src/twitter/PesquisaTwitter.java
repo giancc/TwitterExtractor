@@ -97,6 +97,7 @@ public class PesquisaTwitter {
 					}
 
 					String conteudoTweet = tweet.getText();
+					conteudoTweet = conteudoTweet.replaceAll(";", "");
 					conteudoTweet = conteudoTweet.replaceAll("\n", "").replaceAll("\r", "");
 					HashtagEntity[] hashTag = tweet.getHashtagEntities();
 					
@@ -115,7 +116,7 @@ public class PesquisaTwitter {
 
 					contadorTweet++;
 
-					String linhaArquivo = contadorTweet +";" +conteudoTweet +";" + data +";" +hashTags;
+					String linhaArquivo = String.format("%05d", contadorTweet) +";" +conteudoTweet +";" + data +";" +hashTags;
 
 					arquivo.write(linhaArquivo);
 
