@@ -66,6 +66,8 @@ public class Main {
 
 		Main m = new Main();
 		int op;
+		
+		
 
 		do {
 			op = m.menu();
@@ -81,6 +83,11 @@ public class Main {
 			}
 			case 3: {
 				m.pesquisa();
+				break;
+			}
+			case 4:{
+				Arquivo ar = new Arquivo("extracao");
+				ar.retornaPartidoMaisComentado();
 				break;
 			}
 			case 0: {

@@ -68,7 +68,7 @@ public class Arquivo {
 				// System.out.println(linha);
 				bw.write(linha);
 				bw.newLine();
-//				Thread.sleep(3000);
+				//				Thread.sleep(3000);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -116,7 +116,7 @@ public class Arquivo {
 				aux = aux.replaceAll(m.group(i), "").trim();
 				i++;
 			}
-//	        System.out.println(aux);
+			//	        System.out.println(aux);
 		}
 
 		if (aux.length() < MAX_CARACTERES) {
@@ -223,6 +223,89 @@ public class Arquivo {
 		}
 
 		return result;
+	}
+
+	public void retornaPartidoMaisComentado() {
+		String partidos[][] = {
+				{"MDB", "0"}, 
+				{"PTB", "0"  },
+				{"PDT", "0"},  
+				{"PT", "0"},  
+				{"DEM", "0"},  
+				{"PCdoB", "0"},  
+				{"PSB", "0"},  
+				{"PSDB", "0"},  
+				{"PTC", "0"},  
+				{"PSC", "0"},  
+				{"CIDADANIA", "0"},  
+				{"AVANTE", "0"},  
+				{"PP", "0"},  
+				{"PSTU", "0"},  
+				{"PCB", "0"},  
+				{"PRTB", "0"},  
+				{"DC", "0"},  
+				{"PCO", "0"},  
+				{"PODE", "0"},  
+				{"PSL", "0"},  
+				{"REPUBLICANOS", "0"},  
+				{"PSOL", "0"},  
+				{"PL", "0"},  
+				{"PATRIOTA", "0"},  
+				{"PROS", "0"},  
+				{"SOLIDARIEDADE", "0"},  
+				{"NOVO", "0"},  
+				{"REDE", "0"},  
+				{"PMB", "0"},  
+				{"UP", "0"},  
+		};
+
+		String linha="";
+
+		try {
+
+			this.f = new File(System.getProperty("user.dir") + "\\extracao.txt");
+			this.fw = new FileWriter(this.f, true);
+			this.bw = new BufferedWriter(this.fw);
+
+			System.out.println("Arquivo tratado em " + f.getAbsolutePath());
+
+			fileReader = new FileReader(this.file);
+			this.bufferedReader = new BufferedReader(this.fileReader);
+			int c = 0;
+			while (true) {
+				linha = bufferedReader.readLine();
+				if (linha == null) {
+					break;
+				}
+				for(int i=0; i<partidos.length; i++) {
+					if(linha.toUpperCase().contains(partidos[i][0])) {
+						partidos[i][1] = Integer.toString(Integer.parseInt(partidos[i][1]) + 1) ;
+					}
+				}
+				System.out.println(++c);
+			}
+			fw.close();
+			bw.close();
+		} catch (IOException e) {
+			System.out.println("IOException:");
+			e.printStackTrace();
+		}
+
+		for(int i=0; i<partidos.length; i++) {
+			System.out.println("Partido " +partidos[i][0] +" Contagem: "+ partidos[i][1]);
+		}
+		
+		int maior = Integer.parseInt(partidos[0][1]);
+		int indice=0;
+		for(int i=0; i<partidos.length; i++) {
+			if(Integer.parseInt(partidos[i][1]) > maior) {
+				maior = Integer.parseInt(partidos[i][1]);
+				indice = i;
+			}
+		}
+		System.out.println();
+		System.out.println("Partido mais comentado: " +partidos[indice][0]);
+		System.out.println();
 	}
 
 }

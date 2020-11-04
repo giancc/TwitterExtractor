@@ -25,39 +25,7 @@ public class PesquisaTwitter {
 	private Twitter twitter;
 	private long contadorTweet = 0;
 
-	//	String partidos[] = {"MDB\r\n" +  
-	//			"PTB\r\n" +  
-	//			"PDT\r\n" +  
-	//			"PT\r\n" +  
-	//			"DEM\r\n" +  
-	//			"PCdoB\r\n" +  
-	//			"PSB\r\n" +  
-	//			"PSDB\r\n" +  
-	//			"PTC\r\n" +  
-	//			"PSC\r\n" +  
-	//			"PMN\r\n" +  
-	//			"CIDADANIA\r\n" +  
-	//			"PV\r\n" +  
-	//			"AVANTE\r\n" +  
-	//			"PP\r\n" +  
-	//			"PSTU\r\n" +  
-	//			"PCB\r\n" +  
-	//			"PRTB\r\n" +  
-	//			"DC\r\n" +  
-	//			"PCO\r\n" +  
-	//			"PODE\r\n" +  
-	//			"PSL\r\n" +  
-	//			"REPUBLICANOS \r\n" +  
-	//			"PSOL\r\n" +  
-	//			"PL\r\n" +  
-	//			"PSD\r\n" +  
-	//			"PATRIOTA\r\n" +  
-	//			"PROS\r\n" +  
-	//			"SOLIDARIEDADE\r\n" +  
-	//			"NOVO\r\n" +  
-	//			"REDE\r\n" +  
-	//			"PMB\r\n" +  
-	//	"UP\r\n"};
+	
 
 	public PesquisaTwitter() {
 
