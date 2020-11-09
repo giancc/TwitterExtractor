@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.Scanner;
 
 import arquivo.Arquivo;
+import arquivo.LeArquivo;
 import twitter.PesquisaTwitter;
 
 public class Main {
@@ -16,9 +17,13 @@ public class Main {
 		System.out.println("1 - Extrair dados");
 		System.out.println("2 - Tratar dados");
 		System.out.println("3 - Pesquisa Binaria");
+		System.out.println("4 - Resposta hipótese: \"Partido mais comentado\" ");
+		System.out.println("5 - Consulta índice");
 		System.out.println("0 - Sair");
 
 		op = Integer.parseInt(s.nextLine());
+
+//		s.close();
 
 		return op;
 	}
@@ -32,7 +37,7 @@ public class Main {
 
 		try {
 			PesquisaTwitter twitter = new PesquisaTwitter();
-			while (contExtracao <= 10) {
+			while (contExtracao <= 4) {
 
 				System.out.println("Extração " + (contExtracao));
 
@@ -57,17 +62,30 @@ public class Main {
 	}
 
 	public void pesquisa() throws IOException {
-		Scanner l = new Scanner(System.in);
+		Scanner s = new Scanner(System.in);
 		System.out.println("Digite o código da linha a ser buscada:");
-		System.out.println(Arquivo.binarySearch(l.nextLine()));
+		System.out.println(Arquivo.binarySearch(s.nextLine()));
+//		s.close();
+	}
+
+	public void pesquisaIndices() {
+		String path = "novo.txt";
+
+		LeArquivo readArchive = new LeArquivo();
+
+		try {
+			readArchive.converterArquivo(path, "path.bin");
+			readArchive.achaPosicao("path.bin");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
 	}
 
 	public static void main(String[] args) throws IOException {
 
 		Main m = new Main();
 		int op;
-		
-		
 
 		do {
 			op = m.menu();
@@ -85,9 +103,13 @@ public class Main {
 				m.pesquisa();
 				break;
 			}
-			case 4:{
+			case 4: {
 				Arquivo ar = new Arquivo("extracao");
 				ar.retornaPartidoMaisComentado();
+				break;
+			}
+			case 5: {
+				m.pesquisaIndices();
 				break;
 			}
 			case 0: {

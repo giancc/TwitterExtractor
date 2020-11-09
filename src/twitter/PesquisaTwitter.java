@@ -18,30 +18,27 @@ import twitter4j.conf.ConfigurationBuilder;
 
 public class PesquisaTwitter {
 
-	//	private Query query;
-	//	private QueryResult result;
+	// private Query query;
+	// private QueryResult result;
 	private ConfigurationBuilder cb;
 	private TwitterFactory tf;
 	private Twitter twitter;
 	private long contadorTweet = 0;
 
-	
-
 	public PesquisaTwitter() {
 
 		this.cb = new ConfigurationBuilder();
-		this.cb.setDebugEnabled(true)
-		.setOAuthConsumerKey("wZCHBUjihkWwmGopmWZWKuHeE")
-		.setOAuthConsumerSecret("txuFKWD3apgswacgfA0WBLJ6xCxqP2oLKbLmCbr4Ioe5SVOUy4")
-		.setOAuthAccessToken("1539801186-z1xrqXklXtfLzWUh82kHC5M2Fd01BqJxlyDOTZF")
-		.setOAuthAccessTokenSecret("zWPltVBJgxOLEd2asnmNmxSQqdbhmAHF1ai13cZWFQh4X");
+		this.cb.setDebugEnabled(true).setOAuthConsumerKey("wZCHBUjihkWwmGopmWZWKuHeE")
+				.setOAuthConsumerSecret("txuFKWD3apgswacgfA0WBLJ6xCxqP2oLKbLmCbr4Ioe5SVOUy4")
+				.setOAuthAccessToken("1539801186-z1xrqXklXtfLzWUh82kHC5M2Fd01BqJxlyDOTZF")
+				.setOAuthAccessTokenSecret("zWPltVBJgxOLEd2asnmNmxSQqdbhmAHF1ai13cZWFQh4X");
 		this.tf = new TwitterFactory(cb.build());
 		this.twitter = tf.getInstance();
 	}
 
 	public void pesquisa() {
 
-		try {			
+		try {
 			Query query = new Query("eleicoes2020");
 			query.setCount(100);
 
@@ -59,7 +56,8 @@ public class PesquisaTwitter {
 					String data = tweet.getCreatedAt().toString();
 
 					try {
-						data = new SimpleDateFormat("dd/MM/yyyy").format(new SimpleDateFormat("EEE MMM d HH:mm:ss zzz yyyy", Locale.US).parse(data));
+						data = new SimpleDateFormat("dd/MM/yyyy")
+								.format(new SimpleDateFormat("EEE MMM d HH:mm:ss zzz yyyy", Locale.US).parse(data));
 					} catch (java.text.ParseException e) {
 						e.printStackTrace();
 					}
@@ -68,14 +66,14 @@ public class PesquisaTwitter {
 					conteudoTweet = conteudoTweet.replaceAll(";", "");
 					conteudoTweet = conteudoTweet.replaceAll("\n", "").replaceAll("\r", "");
 					HashtagEntity[] hashTag = tweet.getHashtagEntities();
-					
+
 					StringBuilder hashTags = new StringBuilder();
 
-					if(hashTag.length > 0 ) {
+					if (hashTag.length > 0) {
 						for (int i = 0; i < hashTag.length; i++) {
 							hashTags.append(hashTag[i].getText());
 
-							if ( (i+1)  != hashTag.length) {
+							if ((i + 1) != hashTag.length) {
 								hashTags.append(",");
 							}
 						}
@@ -84,7 +82,8 @@ public class PesquisaTwitter {
 
 					contadorTweet++;
 
-					String linhaArquivo = String.format("%05d", contadorTweet) +";" +conteudoTweet +";" + data +";" +hashTags;
+					String linhaArquivo = String.format("%05d", contadorTweet) + ";" + conteudoTweet + ";" + data + ";"
+							+ hashTags;
 
 					arquivo.write(linhaArquivo);
 
@@ -96,10 +95,9 @@ public class PesquisaTwitter {
 
 			} while (searchResultCount != 0 && searchResultCount % 100 == 0);
 
-
-		} catch(TwitterException e) {
+		} catch (TwitterException e) {
 			e.printStackTrace();
-		} catch(IOException e) {
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
