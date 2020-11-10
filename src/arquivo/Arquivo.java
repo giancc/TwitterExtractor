@@ -256,7 +256,6 @@ public class Arquivo {
 						partidos[i][1] = Integer.toString(Integer.parseInt(partidos[i][1]) + 1);
 					}
 				}
-				System.out.println(++c);
 			}
 			fw.close();
 			bw.close();

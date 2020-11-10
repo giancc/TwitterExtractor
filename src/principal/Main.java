@@ -1,10 +1,17 @@
 package principal;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.RandomAccessFile;
+import java.io.Reader;
 import java.util.Scanner;
 
 import arquivo.Arquivo;
 import arquivo.LeArquivo;
+import tabelahash.TabelaHash;
 import twitter.PesquisaTwitter;
 
 public class Main {
@@ -19,11 +26,12 @@ public class Main {
 		System.out.println("3 - Pesquisa Binaria");
 		System.out.println("4 - Resposta hipótese: \"Partido mais comentado\" ");
 		System.out.println("5 - Consulta índice");
+		System.out.println("6 - Consulta data - Tabela Hash");
 		System.out.println("0 - Sair");
 
 		op = Integer.parseInt(s.nextLine());
 
-//		s.close();
+		//		s.close();
 
 		return op;
 	}
@@ -37,7 +45,7 @@ public class Main {
 
 		try {
 			PesquisaTwitter twitter = new PesquisaTwitter();
-			while (contExtracao <= 4) {
+			while (twitter.getContadorTweet() <= 10000) {
 
 				System.out.println("Extração " + (contExtracao));
 
@@ -65,7 +73,7 @@ public class Main {
 		Scanner s = new Scanner(System.in);
 		System.out.println("Digite o código da linha a ser buscada:");
 		System.out.println(Arquivo.binarySearch(s.nextLine()));
-//		s.close();
+		//		s.close();
 	}
 
 	public void pesquisaIndices() {
@@ -80,6 +88,72 @@ public class Main {
 			e.printStackTrace();
 		}
 
+	}
+
+	public void thash() {
+		TabelaHash[] t = new TabelaHash[12];
+		
+		File f;
+		RandomAccessFile randomAcessFile = null;
+		
+		for(int i=0; i<t.length; i++) {
+			t[i] = new TabelaHash();
+			t[i].setCodMes(i+1);
+		}
+
+		String linha = "";
+
+		try {
+
+			f = new File(System.getProperty("user.dir") + "\\novo.txt");
+			randomAcessFile = new RandomAccessFile(f, "r");
+
+			System.out.println("Arquivo tratado em " + f.getAbsolutePath());
+
+			while (true) {
+				linha = randomAcessFile.readLine();
+				if (linha == null) {
+					break;
+				}
+				long endereco = randomAcessFile.getFilePointer();
+				String[] quebrado=linha.split(";");
+				String dataQuebrada[] = quebrado[2].split("/");
+				t[Integer.parseInt(dataQuebrada[1])-1].insereDataLista(quebrado[2], endereco);
+				
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		for(int i=0; i<t.length; i++) {
+			System.out.println("Mes " +t[i].getCodMes());
+			for(int j=0; j<t[i].getListaDatas().size(); j++) {
+				System.out.println("Data " +t[i].getListaDatas().get(j).getData() +" no endereço "+t[i].getListaDatas().get(j).getEnderecoArquivo());
+			}
+			
+		}
+		
+		System.out.println("Digite o endereço do registro que quer visualizar:");
+		Scanner leitor = new Scanner(System.in);
+		
+		try {
+			randomAcessFile.seek(Long.parseLong(leitor.nextLine())-550);
+			
+			String[] split = randomAcessFile.readLine().split(";");
+			
+			String retorno = "";
+			retorno = retorno.concat(split[0]);
+			retorno = retorno.concat(";");
+			retorno = retorno.concat(split[1].replaceAll("0", ""));
+			retorno = retorno.concat(";");
+			retorno = retorno.concat(split[2]);
+			retorno = retorno.concat(";");
+			retorno = retorno.concat(split[3].replaceAll("0", ""));
+			System.out.println(retorno);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
 	}
 
 	public static void main(String[] args) throws IOException {
@@ -110,6 +184,10 @@ public class Main {
 			}
 			case 5: {
 				m.pesquisaIndices();
+				break;
+			}
+			case 6: {
+				m.thash();
 				break;
 			}
 			case 0: {

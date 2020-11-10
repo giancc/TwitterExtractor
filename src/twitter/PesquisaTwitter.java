@@ -35,12 +35,17 @@ public class PesquisaTwitter {
 		this.tf = new TwitterFactory(cb.build());
 		this.twitter = tf.getInstance();
 	}
+	
+	public long getContadorTweet(){
+		return contadorTweet;
+	}
 
 	public void pesquisa() {
 
 		try {
 			Query query = new Query("eleicoes2020");
 			query.setCount(100);
+			query.setSince("2020-10-01");
 
 			int searchResultCount;
 			long lowestTweetId = Long.MAX_VALUE;
