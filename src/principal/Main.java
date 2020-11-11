@@ -1,12 +1,8 @@
 package principal;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.RandomAccessFile;
-import java.io.Reader;
 import java.util.Scanner;
 
 import arquivo.Arquivo;
@@ -25,8 +21,9 @@ public class Main {
 		System.out.println("2 - Tratar dados");
 		System.out.println("3 - Pesquisa Binaria");
 		System.out.println("4 - Resposta hipótese: \"Partido mais comentado\" ");
-		System.out.println("5 - Consulta índice");
-		System.out.println("6 - Consulta data - Tabela Hash");
+		System.out.println("5 - Consulta índice - ID Tweet");
+		System.out.println("6 - Consulta índice - HashTags");
+		System.out.println("7 - Consulta data - Tabela Hash");
 		System.out.println("0 - Sair");
 
 		op = Integer.parseInt(s.nextLine());
@@ -87,7 +84,19 @@ public class Main {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public void pesquisaHashtags() {
+		String path = "novo.txt";
 
+		LeArquivo readArchive = new LeArquivo();
+
+		try {
+			readArchive.converterArquivoHashtags(path, "path.bin");
+			readArchive.achaPosicao("path.bin");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void thash() {
@@ -155,7 +164,8 @@ public class Main {
 		}
 		
 	}
-
+	
+	
 	public static void main(String[] args) throws IOException {
 
 		Main m = new Main();
@@ -187,6 +197,10 @@ public class Main {
 				break;
 			}
 			case 6: {
+				m.pesquisaHashtags();
+				break;
+			}
+			case 7: {
 				m.thash();
 				break;
 			}

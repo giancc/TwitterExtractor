@@ -80,6 +80,42 @@ public class LeArquivo {
 			System.out.println("Aconteceu um problema: " + e.getMessage());
 		}
 	}
+	
+	
+	public void converterArquivoHashtags(String arqTexto, String arqBin) throws IOException {
+
+		File arqEntrada = new File(arqTexto);
+		Scanner leitor = new Scanner(arqEntrada);
+
+		int contador = 0;
+		try {
+
+			File arqSaida = new File(arqBin);
+			RandomAccessFile dadosSaida = new RandomAccessFile(arqSaida, "rw");
+			dadosSaida.setLength(0);
+			dadosSaida.writeInt(0);
+
+			while (leitor.hasNextLine()) {
+				String linha = leitor.nextLine();
+				
+				String[] dados = linha.split(";");
+				Registro novo = criaRegistro(dados);
+				long pos = dadosSaida.getFilePointer();
+				System.out.println("HashTag: " + novo.getHashtags().replace("0", "") + ", na posição " + pos);
+				novo.saveToFile(dadosSaida);
+				contador++;
+
+			}
+			leitor.close();
+
+			dadosSaida.seek(0);
+			dadosSaida.writeInt(contador);
+			dadosSaida.close();
+
+		} catch (FileNotFoundException e) {
+			System.out.println("Aconteceu um problema: " + e.getMessage());
+		}
+	}
 
 	public void achaPosicao(String path) throws IOException {
 		File arqLeitura = new File(path);

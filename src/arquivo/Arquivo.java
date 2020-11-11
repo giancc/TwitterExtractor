@@ -107,16 +107,21 @@ public class Arquivo {
 		String aux = vetorString[1];
 
 		if (aux.contains("http")) {
-			String urlPattern = "((https?|ftp|gopher|telnet|file|Unsure|http):((//)|(\\\\))+[\\w\\d:#@%/;$()~_?\\+-=\\\\\\.&]*)";
-			Pattern p = Pattern.compile(urlPattern, Pattern.CASE_INSENSITIVE);
+			try {
+				String urlPattern = "((https?|ftp|gopher|telnet|file|Unsure|http):((//)|(\\\\))+[\\w\\d:#@%/;$()~_?\\+-=\\\\\\.&]*)";
+				Pattern p = Pattern.compile(urlPattern, Pattern.CASE_INSENSITIVE);
 
-			Matcher m = p.matcher(aux);
-			int i = 0;
-			while (m.find()) {
-				aux = aux.replaceAll(m.group(i), "").trim();
-				i++;
+				Matcher m = p.matcher(aux);
+				int i = 0;
+				while (m.find()) {
+					aux = aux.replaceAll(m.group(i), "").trim();
+					i++;
+				}
+			} catch (Exception e) {
+				e.getMessage();
 			}
-			// System.out.println(aux);
+			
+
 		}
 
 		if (aux.length() < MAX_CARACTERES) {
